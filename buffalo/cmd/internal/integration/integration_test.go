@@ -3,6 +3,7 @@
 package integration
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -53,6 +54,7 @@ func call(args []string, fn func(dir string)) error {
 	defer os.Setenv("PWD", pwd)
 
 	if err := exec(args); err != nil {
+		fmt.Printf("exec error: %s", err)
 		return err
 	}
 	return safe.Run(func() {
