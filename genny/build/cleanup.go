@@ -2,6 +2,7 @@ package build
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -20,9 +21,15 @@ func Cleanup(opts *Options) genny.RunFn {
 		}
 
 		var err error
+		var fileInfo os.FileInfo
 		opts.rollback.Range(func(k, v interface{}) bool {
 			f := genny.NewFileS(k.(string), v.(string))
 			r.Logger.Debugf("Rollback: %s", f.Name())
+			fileInfo, err = os.Stat(k.(string))
+			if err == nil {
+				log.Println(fileInfo)
+				log.Println(fileInfo.Mode())
+			}
 			if err = r.File(f); err != nil {
 				fmt.Printf("cleanup error: %s - %s", f.Name(), err)
 				return false
