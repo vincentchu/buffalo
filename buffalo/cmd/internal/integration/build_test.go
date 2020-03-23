@@ -3,7 +3,6 @@
 package integration
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -29,7 +28,6 @@ func Test_New_Build_Nominal(t *testing.T) {
 
 		args = []string{"build"}
 		err := exec(args)
-		fmt.Println("exec(args)")
 		r.NoError(err)
 	})
 	r.NoError(err)

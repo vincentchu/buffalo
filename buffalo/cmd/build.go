@@ -84,7 +84,7 @@ var xbuildCmd = &cobra.Command{
 		// defer clean(run)
 		defer func() {
 			if err := clean(run); err != nil {
-				log.Fatal("build:clean", err)
+				log.Fatal("build:clean: ", err)
 			}
 		}()
 		if err := run.WithNew(build.New(opts)); err != nil {

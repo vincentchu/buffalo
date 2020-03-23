@@ -1,6 +1,7 @@
 package build
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -13,10 +14,12 @@ import (
 // Cleanup all of the generated files
 func Cleanup(opts *Options) genny.RunFn {
 	return func(r *genny.Runner) error {
+		fmt.Println("start cleanup")
 		defer os.RemoveAll(filepath.Join(opts.Root, "a"))
 		if err := jam.Clean(); err != nil {
 			return err
 		}
+		fmt.Println("after jam.Clean()")
 
 		var err error
 		opts.rollback.Range(func(k, v interface{}) bool {
@@ -29,8 +32,10 @@ func Cleanup(opts *Options) genny.RunFn {
 			return true
 		})
 		if err != nil {
+			fmt.Println("cleanup error")
 			return err
 		}
+		fmt.Println("after opts.rollback.Range")
 		for _, f := range r.Disk.Files() {
 			if _, keep := opts.keep.Load(f.Name()); keep {
 				// Keep this file
