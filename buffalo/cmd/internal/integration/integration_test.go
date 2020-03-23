@@ -4,6 +4,7 @@ package integration
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -52,6 +53,11 @@ func call(args []string, fn func(dir string)) error {
 	os.Setenv("PWD", tdir)
 	defer os.Chdir(pwd)
 	defer os.Setenv("PWD", pwd)
+
+	fileInfo, err := os.Stat(tdir)
+	if err == nil {
+		log.Println("testapp=", fileInfo.Mode())
+	}
 
 	if err := exec(args); err != nil {
 		fmt.Printf("exec error: %s", err)

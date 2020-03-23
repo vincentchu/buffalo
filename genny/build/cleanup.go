@@ -16,12 +16,16 @@ import (
 func Cleanup(opts *Options) genny.RunFn {
 	return func(r *genny.Runner) error {
 		defer os.RemoveAll(filepath.Join(opts.Root, "a"))
+		var err error
+		var fileInfo os.FileInfo
+		fileInfo, err = os.Stat(opts.Root)
+		if err == nil {
+			log.Println(opts.Root, "=", fileInfo.Mode())
+		}
 		if err := jam.Clean(); err != nil {
 			return err
 		}
 
-		var err error
-		var fileInfo os.FileInfo
 		opts.rollback.Range(func(k, v interface{}) bool {
 			f := genny.NewFileS(k.(string), v.(string))
 			r.Logger.Debugf("Rollback: %s", f.Name())
