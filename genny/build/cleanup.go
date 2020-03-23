@@ -15,6 +15,7 @@ func Cleanup(opts *Options) genny.RunFn {
 	return func(r *genny.Runner) error {
 		defer os.RemoveAll(filepath.Join(opts.Root, "a"))
 		if err := jam.Clean(); err != nil {
+			r.Logger.Error("could not jam.Clean")
 			return err
 		}
 
